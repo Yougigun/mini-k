@@ -1,0 +1,23 @@
+version: "3"
+services:
+  api-server:
+    image: api-server:latest
+    build:
+      context: ./api-server
+      dockerfile: Dockerfile
+    environment:
+      - KSCHEDULER_URL=http://k-scheduler:8080
+      - PORT=7070
+      - RUST_LOG=info
+    ports:
+      - "7070:7070"
+  k-scheduler:
+    image: k-scheduler:latest
+    build:
+      context: ./k-scheduler
+      dockerfile: Dockerfile
+    environment:
+      - RUST_LOG=info
+      - PORT=8080
+    ports:
+      - "8080:8080"
