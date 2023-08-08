@@ -1,9 +1,13 @@
 syntax="proto3";
 package k_scheduler;
 
-service Greeter {
-    // Our SayHello rpc accepts HelloRequests and returns HelloReplies
-    rpc SayHello (HelloRequest) returns (HelloReply);
+import "google/protobuf/empty.proto";
+
+service Kscheduler {
+    rpc CreateContainer (CreateContainerRequest) returns (CreateContainerResponse) {}
+    rpc GetContainer (GetContainerRequest) returns (GetContainerResponse) {}
+    rpc DeleteContainer (DeleteContainerRequest) returns (DeleteContainerResponse) {}
+    rpc ListContainers (google.protobuf.Empty) returns (ListContainersResponse) {}
 }
 
 message HelloRequest {
@@ -15,4 +19,60 @@ message HelloRequest {
 message HelloReply {
     // Reply contains the greeting message
     string message = 1;
+}
+
+message CreateContainerRequest {
+    string image = 1;
+    string name = 2;
+    string command = 3;
+    map<string, string> env = 4;
+    int32 port = 5;
+    int32 cpu = 6;
+    int32 memory = 7;
+}
+
+message CreateContainerResponse {
+    string cid = 1;
+    string name = 2;
+    int32 code = 3;
+    string message = 4;
+}
+
+message GetContainerRequest {
+    string cid = 1;
+}
+
+message GetContainerResponse {
+    ContainerInfo container = 1;
+    int32 code = 2;
+    string message = 3;
+}
+
+message DeleteContainerRequest {
+    string cid = 1;
+}
+
+message DeleteContainerResponse {
+    string cid = 1;
+    string name = 2;
+    int32 code = 3;
+    string message = 4;
+}
+message ContainerInfo {
+    string cid = 1;
+    string name = 2;
+    string status = 3;
+    string image = 4;
+    string command = 5;
+    map<string, string> env = 6;
+    string instance_id = 7;
+    int32 port = 8;
+    string ip = 9;
+    string domain = 10;
+}
+
+message ListContainersResponse {
+    repeated ContainerInfo containers = 1;
+    int32 code = 2;
+    string message = 3;
 }
